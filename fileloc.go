@@ -9,8 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/sirupsen/logrus"
 )
 
 // PathSet represents a set of paths to check for a file
@@ -57,14 +55,11 @@ func (p *PathSet) AddPath(path string) {
 // Find searches for a specified file and returns the absolute path or an error.
 // If the file is already an absolute, it is returned unchanged.
 func (p *PathSet) Find(file string) (string, error) {
-	logrus.Infof("File: %s", file)
 	if strings.HasPrefix(file, "/") {
 		return file, nil
 	}
 	for _, path := range p.pathSet {
-		logrus.Infof("Path: %s", path)
 		fileName := fmt.Sprintf("%s/%s", path, file)
-		logrus.Infof("Filename: %s", fileName)
 		if _, err := os.Stat(fileName); err == nil {
 			absName, err := filepath.Abs(fileName)
 			if err != nil {
